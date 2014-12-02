@@ -44,8 +44,11 @@ public class Schedule implements Credentials{
     }
     
     public boolean checkIfQueuesExist(){
-        if (sqs.listQueues().getQueueUrls().size() > 0)
+        if (sqs.listQueues().getQueueUrls().size() > 0){
+            myQueueUrl = sqs.listQueues().getQueueUrls().get(0);
             return true;
+        }
+            
         else 
             return false;
     }
