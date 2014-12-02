@@ -19,19 +19,25 @@ import java.io.File;
 public class S3Bucket implements Credentials{
     
     AmazonS3 s3client = new AmazonS3Client(credentials);            
-
-    public boolean checkBucket(String bucketlocation){
-        if (s3client.getBucketLocation(bucketlocation) != null)
+    String bucketname;
+    public boolean checkBucket(){
+        if (s3client.getBucketLocation(this.bucketname) != null)
             return true;
         else
             return false;
     }
     
-    public void createBucket(String bucketname){
-        s3client.createBucket(bucketname, Region.US_West);
+    public void createBucket(){
+        s3client.createBucket(this.bucketname, Region.US_West);
     }
     
-    public void putObjectsToBucket(String bucketName,String keyName,File file){
-        s3client.putObject(new PutObjectRequest(bucketName, keyName, file));
+    public void putObjectsToBucket(File file){
+        s3client.putObject(new PutObjectRequest(this.bucketname, file.getName(), file));
     }
+
+    public void setBucketname(String bucketname) {
+        this.bucketname = bucketname;
+    }
+    
+    
 }
