@@ -1,4 +1,4 @@
-package edu.iit.test.scheduler;
+package edu.iit.test.sqs;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -6,7 +6,7 @@ package edu.iit.test.scheduler;
  * and open the template in the editor.
  */
 import edu.iit.message.Data;
-import edu.iit.scheduler.Schedule;
+import edu.iit.sqs.SendQueue;
 import java.util.UUID;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,7 +27,7 @@ public class SchedulerTest {
     
     @Test
     public void createQueue(){
-        Schedule sch = new Schedule();
+        SendQueue sch = new SendQueue();
         if (!sch.checkIfQueuesExist())
             sch.createQueue();
         sch.printAllQueues();

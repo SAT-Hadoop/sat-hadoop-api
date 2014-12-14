@@ -96,7 +96,7 @@ public class S3Bucket implements Credentials {
     }
 
     public void setBucketname(String bucketname) {
-        this.bucketname = bucketname + ":"+UUID.randomUUID();
+        this.bucketname = bucketname + UUID.randomUUID();
     }
 
 }

@@ -25,7 +25,7 @@ public class S3Test {
     @Test
     public void testS3() {
         S3Bucket sb1 = new S3Bucket();
-        sb1.setBucketname(UUID.randomUUID() + "sai");
+        sb1.setBucketname("sai");
         if (!sb1.checkBucket()){
             sb1.createBucket();
         }    

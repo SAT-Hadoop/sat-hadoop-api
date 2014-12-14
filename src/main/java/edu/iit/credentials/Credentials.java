@@ -13,5 +13,8 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider;
  * @author supramo
  */
 public interface Credentials {
-    public final AWSCredentials credentials = new ProfileCredentialsProvider().getCredentials();
+        public final AWSCredentials credentials = new ProfileCredentialsProvider().getCredentials();
+        public final int NUM_WORKERS = 3; 
+        public final String[] SENDQUEUENAMES = {"sai1","sai2","sai3"};
+        public final String[] RECQUEUENAMES = {"pramod1"};
 }

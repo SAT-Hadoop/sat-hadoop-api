@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.iit.scheduler;
+package edu.iit.sqs;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
@@ -24,16 +22,19 @@ import java.util.Map.Entry;
  *
  * @author supramo
  */
-public class Schedule implements Credentials{
+public class SendQueue implements Credentials{
     private final AmazonSQS sqs = new AmazonSQSClient(credentials);
     List<Message> messages;
     String myQueueUrl;
     
     public void createQueue(){
-        CreateQueueRequest createQueueRequest = new CreateQueueRequest().withQueueName("MyQueue");
-        myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
-        Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-        sqs.setRegion(usWest2);
+        for (int i=0;i<SENDQUEUENAMES.length;i++){
+            CreateQueueRequest createQueueRequest = new CreateQueueRequest().withQueueName(SENDQUEUENAMES[i]);
+            myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
+            Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+            sqs.setRegion(usWest2);
+        }
+        
     }
     
     public void printAllQueues(){
@@ -44,12 +45,16 @@ public class Schedule implements Credentials{
     }
     
     public boolean checkIfQueuesExist(){
+        int count = 0;
         if (sqs.listQueues().getQueueUrls().size() > 0){
-            myQueueUrl = sqs.listQueues().getQueueUrls().get(0);
-            return true;
+            for (int i=0;i<sqs.listQueues().getQueueUrls().size();i++){
+                if (sqs.listQueues().getQueueUrls().contains(RECQUEUENAMES[count]))
+                    count++;
+            }
         }
-            
-        else 
+        if (count == (RECQUEUENAMES.length+1))
+            return true;
+        else
             return false;
     }
  
