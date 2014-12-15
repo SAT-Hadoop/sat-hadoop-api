@@ -5,6 +5,8 @@
  */
 package edu.iit.doa;
 
+import edu.iit.model.User;
+import edu.iit.model.User_Jobs;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,29 +18,29 @@ import java.sql.Statement;
  * @author supramo
  */
 public class DOA {
+
     private Connection connect = null;
     private Statement statement = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
-    
-    public void makeConnection(){
-      // this will load the MySQL driver, each DB has its own driver
-        try{
+
+    public void makeConnection() {
+        // this will load the MySQL driver, each DB has its own driver
+        try {
             Class.forName("com.mysql.jdbc.Driver");
-      // setup the connection with the DB.
-      connect = DriverManager
-          .getConnection("jdbc:mysql://localhost/itmd544?"
-              + "user=root&password=root");
-        }
-        catch (Exception e){
+            // setup the connection with the DB.
+            connect = DriverManager
+                    .getConnection("jdbc:mysql://localhost/itmd544?"
+                            + "user=root&password=root");
+        } catch (Exception e) {
             System.out.println("Could not make connection");
             System.exit(1);
         }
-      
+
     }
-    
-    public void createTables(){
-        try{
+
+    public void createTables() {
+        try {
             preparedStatement = connect
                     .prepareStatement("CREATE TABLE IF NOT EXISTS users ("
                             + "userid varchar(30) PRIMARY KEY,"
@@ -47,56 +49,109 @@ public class DOA {
                             + "password varchar(30)"
                             + ")");
             preparedStatement.executeUpdate();
-            
+
             preparedStatement = connect
-          .prepareStatement("CREATE TABLE IF NOT EXISTS user_jobs ("
-                    + "userid varchar(30),"
-                    + "jobid varchar(255) PRIMARY KEY,"
-                    + "jobstatus varchar(100),"
-                    + "intputurl varchar(200),"
-                    + "outputurl varchar(200),"
-                  + "CONSTRAINT userid_key FOREIGN KEY (userid) REFERENCES users(userid)"
-                  + ")");
-            
+                    .prepareStatement("CREATE TABLE IF NOT EXISTS user_jobs ("
+                            + "userid varchar(30),"
+                            + "jobid varchar(255) PRIMARY KEY,"
+                            + "jobstatus varchar(100),"
+                            + "intputurl varchar(200),"
+                            + "outputurl varchar(200),"
+                            + "CONSTRAINT userid_key FOREIGN KEY (userid) REFERENCES users(userid)"
+                            + ")");
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement = connect
+                    .prepareStatement("CREATE TABLE IF NOT EXISTS ec2_queue ("
+                            + "ec2ip varchar(30),"
+                            + "queuename varchar(255)"
+                            + ")");
+
             preparedStatement.executeUpdate();
             connect.close();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Table could not be created");
             System.exit(1);
         }
-        
+
     }
-    
-    public void addJob(String userid,String jobid,String jobstatus,String inputurl,String outputurl){
-        try{
+
+    public void addEc2Queue(String ec2, String queue) {
+        try {
             preparedStatement = connect
-                    .prepareStatement("insert into user_jobs values (?,?,?,?,?)");
-                     preparedStatement.setString(1, userid);
-                     preparedStatement.setString(2, jobid);
-                     preparedStatement.setString(3, jobstatus);
-                     preparedStatement.setString(4, inputurl);
-                     preparedStatement.setString(5, outputurl);
+                    .prepareStatement("insert into ec2_queue values (?,?)");
+            preparedStatement.setString(1, ec2);
+            preparedStatement.setString(2, queue);
+
             preparedStatement.executeUpdate();
+            connect.close();
+        } catch (Exception e) {
+            System.out.println("Addition failed");
         }
-        catch(Exception e){
+    }
+
+    public void updateEc2Queue(String ec2, String queue) {
+        try {
+            preparedStatement = connect
+                    .prepareStatement("update ec2_queue values set ec2ip = ? where queuename = ?");
+            preparedStatement.setString(1, ec2);
+            preparedStatement.setString(2, queue);
+
+            preparedStatement.executeUpdate();
+            connect.close();
+        } catch (Exception e) {
+            System.out.println("Addition failed");
+        }
+    }
+
+    public void addUser(User user) {
+        try {
+            preparedStatement = connect
+                    .prepareStatement("insert into user values (?,?,?,?)");
+            preparedStatement.setString(1, user.getUserid());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getEmailid());
+            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.executeUpdate();
+            connect.close();
+        } catch (Exception e) {
             System.out.println("Could not add job to the database");
         }
     }
-    
-    public void updateJob(String userid,String jobid,String jobstatus,String inputurl,String outputurl){
-        try{
+
+    public void addJob(User_Jobs userjob) {
+        try {
             preparedStatement = connect
-                    .prepareStatement("update user_jobs set jobstatus");
-                     preparedStatement.setString(1, userid);
-                     preparedStatement.setString(2, jobid);
-                     preparedStatement.setString(3, jobstatus);
-                     preparedStatement.setString(4, inputurl);
-                     preparedStatement.setString(5, outputurl);
+                    .prepareStatement("insert into user_jobs values (?,?,?,?,?)");
+            preparedStatement.setString(1, userjob.getUserid());
+            preparedStatement.setString(2, userjob.getJobid());
+            preparedStatement.setString(3, userjob.getJobstatus());
+            preparedStatement.setString(4, userjob.getInputurl());
+            preparedStatement.setString(5, userjob.getOutputurl());
             preparedStatement.executeUpdate();
+            connect.close();
+        } catch (Exception e) {
+            System.out.println("Could not add job to the database");
         }
-        catch(Exception e){
+    }
+
+    public void updateJob(User_Jobs userjob) {
+        try {
+            preparedStatement = connect
+                    .prepareStatement("update user_jobs set jobstatus=?,inputurl=?,outputurl=? where"
+                            + "userid=? and jobid=?");
+            preparedStatement.setString(4, userjob.getUserid());
+            preparedStatement.setString(5, userjob.getJobid());
+            preparedStatement.setString(1, userjob.getJobstatus());
+            preparedStatement.setString(2, userjob.getInputurl());
+            preparedStatement.setString(3, userjob.getOutputurl());
+            preparedStatement.executeUpdate();
+            connect.close();
+        } catch (Exception e) {
             System.out.println("Could not update the job");
         }
     }
+    
+    
 }
