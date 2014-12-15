@@ -198,4 +198,24 @@ public class DOA {
         }
         return queuename;
     }
+    
+    public String getEc2queue(){
+        String queuename = "";
+        
+        try{
+            preparedStatement = connect
+                    .prepareStatement("select * from ec2_queue where"
+                            + "ec2ip=''");
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            queuename = rs.getString("queuename");
+            rs.close();
+            preparedStatement.close();
+            connect.close();
+        }
+        catch(Exception e){
+            System.out.println("sai is aesome");
+        }
+        return queuename;
+    }
 }
