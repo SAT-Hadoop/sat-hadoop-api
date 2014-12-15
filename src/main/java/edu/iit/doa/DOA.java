@@ -20,9 +20,7 @@ import java.sql.Statement;
 public class DOA {
 
     private Connection connect = null;
-    private Statement statement = null;
     private PreparedStatement preparedStatement = null;
-    private ResultSet resultSet = null;
 
     public void makeConnection() {
         // this will load the MySQL driver, each DB has its own driver
@@ -69,8 +67,10 @@ public class DOA {
                             + ")");
 
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
+            
             System.out.println("Table could not be created");
             System.exit(1);
         }
@@ -85,6 +85,7 @@ public class DOA {
             preparedStatement.setString(2, queue);
 
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
             System.out.println("Addition failed");
@@ -101,7 +102,7 @@ public class DOA {
             preparedStatement.executeUpdate();
             connect.close();
         } catch (Exception e) {
-            System.out.println("Addition failed");
+            System.out.println("updatefailed failed");
         }
     }
 
@@ -114,6 +115,7 @@ public class DOA {
             preparedStatement.setString(3, user.getEmailid());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
             System.out.println("Could not add job to the database");
@@ -147,11 +149,53 @@ public class DOA {
             preparedStatement.setString(2, userjob.getInputurl());
             preparedStatement.setString(3, userjob.getOutputurl());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
             System.out.println("Could not update the job");
         }
     }
+    public User getUser(String userid){
+        User usr = new User();
+        try {
+            preparedStatement = connect
+                    .prepareStatement("select * from user where"
+                            + "userid=?");
+
+            preparedStatement.setString(1, userid);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                usr.setUserid(userid);
+                usr.setEmailid(rs.getString("emailid"));
+                usr.setPhonenumber(rs.getString("phonenumber"));
+                usr.setPassword(rs.getString("password"));
+            }
+            rs.close();
+            preparedStatement.close();
+            connect.close();
+        } catch (Exception e) {
+            System.out.println("Could not update the job");
+        }
+        return usr;
+    }
     
-    
+    public String getEc2Queue(String ec2ip){
+        String queuename = "";
+        try{
+            preparedStatement = connect
+                    .prepareStatement("select * from ec2_queue where"
+                            + "ec2ip=?");
+            preparedStatement.setString(1,ec2ip);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next())
+                queuename = rs.getString("queuename");
+            rs.close();
+            preparedStatement.close();
+            connect.close();
+        }
+        catch(Exception e){
+            System.out.println("sai is aesome");
+        }
+        return queuename;
+    }
 }

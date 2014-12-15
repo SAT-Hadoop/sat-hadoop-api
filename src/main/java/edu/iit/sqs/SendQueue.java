@@ -15,6 +15,7 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import edu.iit.credentials.Credentials;
+import edu.iit.doa.DOA;
 import edu.iit.util.MathFunc;
 import java.util.List;
 import java.util.Map.Entry;
@@ -34,6 +35,8 @@ public class SendQueue extends Credentials{
             myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
             Region usWest2 = Region.getRegion(Regions.US_WEST_2);
             sqs.setRegion(usWest2);
+            DOA doa = new DOA();
+            doa.addEc2Queue(myQueueUrl, "");
         }
         
     }
