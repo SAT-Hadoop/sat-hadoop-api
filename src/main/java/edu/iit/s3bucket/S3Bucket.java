@@ -30,9 +30,9 @@ import java.util.UUID;
  *
  * @author supramo
  */
-public class S3Bucket implements Credentials {
+public class S3Bucket extends Credentials {
 
-    AmazonS3 s3client = new AmazonS3Client(credentials);
+    AmazonS3 s3client = new AmazonS3Client(Credentials.getCreds());
     String bucketname;
 
     public boolean checkBucket() {

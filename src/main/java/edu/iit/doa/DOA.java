@@ -40,14 +40,24 @@ public class DOA {
     public void createTables(){
         try{
             preparedStatement = connect
-          .prepareStatement("CREATE TABLE IF NOT EXISTS users ("
+                    .prepareStatement("CREATE TABLE IF NOT EXISTS users ("
+                            + "userid varchar(30) PRIMARY KEY,"
+                            + "emailid varchar(50),"
+                            + "phonenumber int,"
+                            + "password varchar(30)"
+                            + ")");
+            preparedStatement.executeUpdate();
+            
+            preparedStatement = connect
+          .prepareStatement("CREATE TABLE IF NOT EXISTS user_jobs ("
                     + "userid varchar(30),"
-                    + "emailid varchar(50),"
-                    + "phonenumber int,"
-                    + "jobid varchar(255),"
+                    + "jobid varchar(255) PRIMARY KEY,"
                     + "jobstatus varchar(100),"
                     + "intputurl varchar(200),"
-                    + "outputurl varchar(200))");
+                    + "outputurl varchar(200),"
+                  + "CONSTRAINT userid_key FOREIGN KEY (userid) REFERENCES users(userid)"
+                  + ")");
+            
             preparedStatement.executeUpdate();
             connect.close();
         }
@@ -56,5 +66,37 @@ public class DOA {
             System.exit(1);
         }
         
+    }
+    
+    public void addJob(String userid,String jobid,String jobstatus,String inputurl,String outputurl){
+        try{
+            preparedStatement = connect
+                    .prepareStatement("insert into user_jobs values (?,?,?,?,?)");
+                     preparedStatement.setString(1, userid);
+                     preparedStatement.setString(2, jobid);
+                     preparedStatement.setString(3, jobstatus);
+                     preparedStatement.setString(4, inputurl);
+                     preparedStatement.setString(5, outputurl);
+            preparedStatement.executeUpdate();
+        }
+        catch(Exception e){
+            System.out.println("Could not add job to the database");
+        }
+    }
+    
+    public void updateJob(String userid,String jobid,String jobstatus,String inputurl,String outputurl){
+        try{
+            preparedStatement = connect
+                    .prepareStatement("update user_jobs set jobstatus");
+                     preparedStatement.setString(1, userid);
+                     preparedStatement.setString(2, jobid);
+                     preparedStatement.setString(3, jobstatus);
+                     preparedStatement.setString(4, inputurl);
+                     preparedStatement.setString(5, outputurl);
+            preparedStatement.executeUpdate();
+        }
+        catch(Exception e){
+            System.out.println("Could not update the job");
+        }
     }
 }

@@ -6,6 +6,7 @@
 package edu.iit.scheduler;
 
 import edu.iit.message.Data;
+import edu.iit.sqs.SendQueue;
 
 /**
  *
@@ -14,7 +15,10 @@ import edu.iit.message.Data;
 public class Scheduler {
     
     public boolean submitJob(Data data){
-        
+        SendQueue sendmessage = new SendQueue();
+        if (!sendmessage.checkIfQueuesExist())
+            sendmessage.createQueue();
+        sendmessage.sendMessage(data);
         return true;
     }
     

@@ -15,6 +15,7 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import edu.iit.credentials.Credentials;
+import edu.iit.util.MathFunc;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -22,8 +23,8 @@ import java.util.Map.Entry;
  *
  * @author supramo
  */
-public class SendQueue implements Credentials{
-    private final AmazonSQS sqs = new AmazonSQSClient(credentials);
+public class SendQueue extends Credentials{
+    private final AmazonSQS sqs = new AmazonSQSClient(Credentials.getCreds());
     List<Message> messages;
     String myQueueUrl;
     
@@ -48,18 +49,19 @@ public class SendQueue implements Credentials{
         int count = 0;
         if (sqs.listQueues().getQueueUrls().size() > 0){
             for (int i=0;i<sqs.listQueues().getQueueUrls().size();i++){
-                if (sqs.listQueues().getQueueUrls().contains(RECQUEUENAMES[count]))
+                if (sqs.listQueues().getQueueUrls().contains(SENDQUEUENAMES[count]))
                     count++;
             }
         }
-        if (count == (RECQUEUENAMES.length+1))
+        if (count == (SENDQUEUENAMES.length+1))
             return true;
         else
             return false;
     }
  
     public void printMessages(){
-        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(myQueueUrl);
+        for (int i=0;i<SENDQUEUENAMES.length;i++){
+            ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(SENDQUEUENAMES[i]);
             messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
             for (Message message : messages) {
                 System.out.println("  Message");
@@ -73,11 +75,15 @@ public class SendQueue implements Credentials{
                     System.out.println("    Value: " + entry.getValue());
                 }
             }
-            System.out.println();
+            System.out.println();   
+        }
     }
     public void sendMessage(Object obj){
-        sqs.sendMessage(new SendMessageRequest(myQueueUrl, obj.toString()));
+        int selection = MathFunc.randInt(0, SENDQUEUENAMES.length);
+        sqs.sendMessage(new SendMessageRequest(SQLURL+SENDQUEUENAMES[selection], obj.toString()));
     }
+    
+    
     
     public void deleteMessage(){
         String messageRecieptHandle = messages.get(0).getReceiptHandle();
