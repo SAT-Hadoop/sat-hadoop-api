@@ -13,6 +13,7 @@ import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import edu.iit.credentials.Credentials;
+import edu.iit.doa.DOA;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class ReceivingQueue extends Credentials{
             myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
             Region usWest2 = Region.getRegion(Regions.US_WEST_2);
             sqs.setRegion(usWest2);
+            DOA doa = new DOA();
+            doa.addEc2Queue(myQueueUrl, "");
         }
     }
     public boolean checkIfQueuesExist(){

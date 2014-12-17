@@ -27,7 +27,7 @@ public class SchedulerTest {
     
     @Test
     public void createQueue(){
-        SendQueue sch = new SendQueue();
+  /*      SendQueue sch = new SendQueue();
         if (!sch.checkIfQueuesExist())
             sch.createQueue();
         sch.printAllQueues();
@@ -39,7 +39,7 @@ public class SchedulerTest {
         System.out.println(d1.toString());
         sch.sendMessage("This is awesome");
         sch.printMessages();
-        
+    */    
     }
 
     
