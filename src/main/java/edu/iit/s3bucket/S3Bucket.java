@@ -34,6 +34,10 @@ public class S3Bucket extends Credentials {
     AmazonS3 s3client = new AmazonS3Client(Credentials.getCreds());
     String bucketname;
 
+    
+    public String getBucketName(){
+        return bucketname;
+    }
     public boolean checkBucket() {
         try {
             s3client.getBucketLocation(this.bucketname);

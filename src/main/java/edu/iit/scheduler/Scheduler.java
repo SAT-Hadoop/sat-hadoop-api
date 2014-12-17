@@ -14,7 +14,7 @@ import edu.iit.sqs.SendQueue;
  */
 public class Scheduler {
     
-    public boolean submitJob(Data data){
+    public static boolean submitJob(Data data){
         SendQueue sendmessage = new SendQueue();
         if (!sendmessage.checkIfQueuesExist())
             sendmessage.createQueue();
