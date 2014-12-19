@@ -24,7 +24,7 @@ public class Startup {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test @Ignore
+    @Test 
     public void kickStart() {
     
         DOA doa = new DOA();
@@ -39,10 +39,10 @@ public class Startup {
         
     }
     
-    @Test
+    @Test @Ignore
     public void getQueueNames(){
         DOA doa = new DOA();
-        System.out.println(doa.getEc2queue());
+        System.out.println(doa.getEc2SendQueue());
         SendQueue sendqueue = new SendQueue();
         sendqueue.checkIfQueuesExist();
     }

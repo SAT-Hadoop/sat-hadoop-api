@@ -79,7 +79,7 @@ public class SendQueue extends Credentials{
             }
         }
         System.out.println("The count is "+ count);
-        if (count == (SENDQUEUENAMES.length-1))
+        if (count == (SENDQUEUENAMES.length))
             return true;
         else
             return false;

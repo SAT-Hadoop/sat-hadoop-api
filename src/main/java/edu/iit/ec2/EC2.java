@@ -34,6 +34,7 @@ public class EC2 extends Credentials{
      */
     public void createInstances(){       
         amazonEC2Client.setEndpoint("ec2.us-west-2.amazonaws.com");
+        Set<Instance> instances = new HashSet<Instance>();
         for (int i=0;i<NUM_WORKERS;i++){
             RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
         	
@@ -45,28 +46,31 @@ public class EC2 extends Credentials{
                     .withIamInstanceProfile( new IamInstanceProfileSpecification()
                     .withName( IAM_PROFILE_NAME ) );
                      //.withSecurityGroups("my-security-group");
-            amazonEC2Client.runInstances(runInstancesRequest);
+            RunInstancesResult runInstancesResult = amazonEC2Client.runInstances(runInstancesRequest);
+            try {
+               Thread.sleep(5000);
+               instances.addAll(runInstancesResult.getReservation().getInstances());
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+            
         }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-        DescribeInstancesResult describeInstancesRequest = amazonEC2Client.describeInstances();
-            List<Reservation> reservations = describeInstancesRequest.getReservations();
-            Set<Instance> instances = new HashSet<Instance>();
+        
+        //DescribeInstancesResult describeInstancesRequest = amazonEC2Client.describeInstances();
+            //List<Reservation> reservations = describeInstancesRequest.getReservations();
+            /*
             // add all instances to a Set.
             for (Reservation reservation : reservations) {
              instances.addAll(reservation.getInstances());
-            }
+            }*/
             
             System.out.println("You have " + instances.size() + " Amazon EC2 instance(s).");
             DOA doa = new DOA();
             for (Instance ins : instances){
                 if (ins.getKeyName().equals(KEY_NAME)){
-                    System.out.println("DNS name is "+ ins.getPublicDnsName());
-                    System.out.println("queue name is "+doa.getEc2queue());
-                    doa.updateEc2Queue(ins.getPublicDnsName(),doa.getEc2queue());
+                    System.out.println("DNS name is "+ ins.getPrivateIpAddress());
+                    System.out.println("queue name is "+doa.getEc2SendQueue());
+                    doa.updateEc2Queue(ins.getPrivateIpAddress(),doa.getEc2SendQueue());
                 }
                 
             }

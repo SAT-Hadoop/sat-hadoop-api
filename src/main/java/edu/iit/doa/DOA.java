@@ -75,7 +75,7 @@ public class DOA {
             preparedStatement = connect
                     .prepareStatement("CREATE TABLE IF NOT EXISTS ec2_queue ("
                             + "ec2ip varchar(255),"
-                            + "queuename varchar(255)"
+                            + "queuename varchar(255),"
                             + "type varchar(255)"
                             + ")");
 
@@ -128,6 +128,7 @@ public class DOA {
             preparedStatement.setString(2, queue);
 
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,16 +260,16 @@ public class DOA {
      *
      * @return
      */
-    public String getEc2queue(){
+    public String getEc2SendQueue(){
         String queuename = "";
         
         try{
             connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("select * from ec2_queue where "
-                            + "ec2ip is not null and type = 'send'");
+                            + "ec2ip='' and type = 'send'");
             ResultSet rs = preparedStatement.executeQuery();
-            rs.next();
+            rs.next(); 
             queuename = rs.getString("queuename");
             rs.close();
             preparedStatement.close();
