@@ -7,6 +7,8 @@ package edu.iit.ec2;
 
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
+import com.amazonaws.services.ec2.model.IamInstanceProfile;
+import com.amazonaws.services.ec2.model.IamInstanceProfileSpecification;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceState;
 import com.amazonaws.services.ec2.model.Reservation;
@@ -26,27 +28,29 @@ import java.util.logging.Logger;
  */
 public class EC2 extends Credentials{
     AmazonEC2Client amazonEC2Client = new AmazonEC2Client(Credentials.getCreds());
-
+    
     /**
      *
      */
-    public void createInstances(){
-        
+    public void createInstances(){       
+        amazonEC2Client.setEndpoint("ec2.us-west-2.amazonaws.com");
         for (int i=0;i<NUM_WORKERS;i++){
             RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
         	
-            runInstancesRequest.withImageId("ami-4b814f22")
-                     .withInstanceType("m1.small")
+            runInstancesRequest.withImageId("ami-b5a7ea85")
+                     .withInstanceType("t2.micro")
                      .withMinCount(1)
                      .withMaxCount(1)
-                     .withKeyName("itmohadoop");
+                     .withKeyName(KEY_NAME)
+                    .withIamInstanceProfile( new IamInstanceProfileSpecification()
+                    .withName( IAM_PROFILE_NAME ) );
                      //.withSecurityGroups("my-security-group");
-            RunInstancesResult runInstancesResult = amazonEC2Client.runInstances(runInstancesRequest);
+            amazonEC2Client.runInstances(runInstancesRequest);
         }
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(EC2.class.getName()).log(Level.SEVERE, null, ex);
+            Thread.currentThread().interrupt();
         }
         DescribeInstancesResult describeInstancesRequest = amazonEC2Client.describeInstances();
             List<Reservation> reservations = describeInstancesRequest.getReservations();
@@ -59,7 +63,12 @@ public class EC2 extends Credentials{
             System.out.println("You have " + instances.size() + " Amazon EC2 instance(s).");
             DOA doa = new DOA();
             for (Instance ins : instances){
-                doa.updateEc2Queue(doa.getEc2queue(), ins.getPublicDnsName());
+                if (ins.getKeyName().equals(KEY_NAME)){
+                    System.out.println("DNS name is "+ ins.getPublicDnsName());
+                    System.out.println("queue name is "+doa.getEc2queue());
+                    doa.updateEc2Queue(ins.getPublicDnsName(),doa.getEc2queue());
+                }
+                
             }
     }
     

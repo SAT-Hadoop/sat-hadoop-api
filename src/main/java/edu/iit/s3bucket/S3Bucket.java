@@ -34,10 +34,18 @@ public class S3Bucket extends Credentials {
     AmazonS3 s3client = new AmazonS3Client(Credentials.getCreds());
     String bucketname;
 
-    
+    /**
+     *
+     * @return
+     */
     public String getBucketName(){
         return bucketname;
     }
+
+    /**
+     *
+     * @return
+     */
     public boolean checkBucket() {
         try {
             s3client.getBucketLocation(this.bucketname);
@@ -48,6 +56,9 @@ public class S3Bucket extends Credentials {
 
     }
 
+    /**
+     *
+     */
     public void setRules() {
         Transition transToArchive = new Transition()
                 .withDays(365)
@@ -69,12 +80,19 @@ public class S3Bucket extends Credentials {
         s3client.setBucketLifecycleConfiguration(this.bucketname, configuration);
     }
 
+    /**
+     *
+     */
     public void createBucket() {
 
         s3client.createBucket(this.bucketname, Region.US_West);
         setRules();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean emptyBucket() {
         DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest(this.bucketname);
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
@@ -94,10 +112,18 @@ public class S3Bucket extends Credentials {
         }
     }
 
+    /**
+     *
+     * @param file
+     */
     public void putObjectsToBucket(File file) {
         s3client.putObject(new PutObjectRequest(this.bucketname, file.getName(), file));
     }
 
+    /**
+     *
+     * @param bucketname
+     */
     public void setBucketname(String bucketname) {
         this.bucketname = bucketname + UUID.randomUUID();
     }

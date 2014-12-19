@@ -30,6 +30,10 @@ public abstract class Credentials {
         return credentials;
     }
 
+    
+    public final String KEY_NAME = "itmo562";
+    
+    public final String IAM_PROFILE_NAME = "developer";
     /**
      *
      */
@@ -38,7 +42,7 @@ public abstract class Credentials {
     /**
      *
      */
-    public final String[] SENDQUEUENAMES = {"sai1", "sai2", "sai3"};
+    public final String[] SENDQUEUENAMES = {"sai4", "sai2", "sai3"};
 
     /**
      *

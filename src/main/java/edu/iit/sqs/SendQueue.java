@@ -33,14 +33,22 @@ public class SendQueue extends Credentials{
      *
      */
     public void createQueue(){
-        for (int i=0;i<SENDQUEUENAMES.length;i++){
+        try {
+            for (int i=0;i<SENDQUEUENAMES.length;i++){
+            System.out.println("creating queue : " + SENDQUEUENAMES[i]);
             CreateQueueRequest createQueueRequest = new CreateQueueRequest().withQueueName(SENDQUEUENAMES[i]);
             myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
-            Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-            sqs.setRegion(usWest2);
+            //Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+            //sqs.setRegion(usWest2);
             DOA doa = new DOA();
-            doa.addEc2Queue(myQueueUrl, "");
+            doa.addEc2Queue("", myQueueUrl);
+            }
         }
+        catch(Exception e){
+            System.out.println("Could not create queue, please try again");
+            System.exit(1);
+        }
+        
         
     }
     
@@ -61,12 +69,17 @@ public class SendQueue extends Credentials{
     public boolean checkIfQueuesExist(){
         int count = 0;
         if (sqs.listQueues().getQueueUrls().size() > 0){
+            System.out.println("The size is " + sqs.listQueues().getQueueUrls().size());
             for (int i=0;i<sqs.listQueues().getQueueUrls().size();i++){
-                if (sqs.listQueues().getQueueUrls().contains(SENDQUEUENAMES[count]))
-                    count++;
+                for (int j=0;j<SENDQUEUENAMES.length;j++){
+                    if (sqs.listQueues().getQueueUrls().get(i).contains(SENDQUEUENAMES[j]))
+                        count++;
+                }
+                
             }
         }
-        if (count == (SENDQUEUENAMES.length+1))
+        System.out.println("The count is "+ count);
+        if (count == (SENDQUEUENAMES.length-1))
             return true;
         else
             return false;

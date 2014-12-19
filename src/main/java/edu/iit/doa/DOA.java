@@ -24,20 +24,25 @@ public class DOA {
 
     /**
      *
+     * @return 
      */
-    public void makeConnection() {
+    public Connection makeConnection() {
         // this will load the MySQL driver, each DB has its own driver
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // setup the connection with the DB.
-            connect = DriverManager
+            return DriverManager
                     .getConnection("jdbc:mysql://localhost/itmd544?"
                             + "user=root&password=root");
+            
+            
         } catch (Exception e) {
+            //e.printStackTrace();
             System.out.println("Could not make connection");
             System.exit(1);
         }
-
+        
+        return null;
     }
 
     /**
@@ -45,6 +50,7 @@ public class DOA {
      */
     public void createTables() {
         try {
+            connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("CREATE TABLE IF NOT EXISTS users ("
                             + "userid varchar(30) PRIMARY KEY,"
@@ -53,7 +59,7 @@ public class DOA {
                             + "password varchar(30)"
                             + ")");
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
             preparedStatement = connect
                     .prepareStatement("CREATE TABLE IF NOT EXISTS user_jobs ("
                             + "userid varchar(30),"
@@ -65,11 +71,12 @@ public class DOA {
                             + ")");
 
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
             preparedStatement = connect
                     .prepareStatement("CREATE TABLE IF NOT EXISTS ec2_queue ("
-                            + "ec2ip varchar(30),"
+                            + "ec2ip varchar(255),"
                             + "queuename varchar(255)"
+                            + "type varchar(255)"
                             + ")");
 
             preparedStatement.executeUpdate();
@@ -77,8 +84,9 @@ public class DOA {
             connect.close();
         } catch (Exception e) {
             
-            System.out.println("Table could not be created");
-            System.exit(1);
+            e.printStackTrace();
+            //System.out.println("Table could not be created");
+            //System.exit(1);
         }
 
     }
@@ -90,15 +98,18 @@ public class DOA {
      */
     public void addEc2Queue(String ec2, String queue) {
         try {
+            connect = makeConnection();
             preparedStatement = connect
-                    .prepareStatement("insert into ec2_queue values (?,?)");
+                    .prepareStatement("insert into ec2_queue values (?,?,?)");
             preparedStatement.setString(1, ec2);
             preparedStatement.setString(2, queue);
+            preparedStatement.setString(3,"send");
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connect.close();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Addition failed");
         }
     }
@@ -110,15 +121,17 @@ public class DOA {
      */
     public void updateEc2Queue(String ec2, String queue) {
         try {
+            connect = makeConnection();
             preparedStatement = connect
-                    .prepareStatement("update ec2_queue values set ec2ip = ? where queuename = ?");
+                    .prepareStatement("update ec2_queue set ec2ip = ? where queuename = ?");
             preparedStatement.setString(1, ec2);
             preparedStatement.setString(2, queue);
 
             preparedStatement.executeUpdate();
             connect.close();
         } catch (Exception e) {
-            System.out.println("updatefailed failed");
+            e.printStackTrace();
+            //System.out.println("update failed");
         }
     }
 
@@ -128,6 +141,7 @@ public class DOA {
      */
     public void addUser(User user) {
         try {
+            connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("insert into user values (?,?,?,?)");
             preparedStatement.setString(1, user.getUserid());
@@ -168,6 +182,7 @@ public class DOA {
      */
     public void updateJob(User_Jobs userjob) {
         try {
+            connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("update user_jobs set jobstatus=?,inputurl=?,outputurl=? where"
                             + "userid=? and jobid=?");
@@ -192,6 +207,7 @@ public class DOA {
     public User getUser(String userid){
         User usr = new User();
         try {
+            connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("select * from user where"
                             + "userid=?");
@@ -221,6 +237,7 @@ public class DOA {
     public String getEc2Queue(String ec2ip){
         String queuename = "";
         try{
+            connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("select * from ec2_queue where"
                             + "ec2ip=?");
@@ -246,9 +263,10 @@ public class DOA {
         String queuename = "";
         
         try{
+            connect = makeConnection();
             preparedStatement = connect
-                    .prepareStatement("select * from ec2_queue where"
-                            + "ec2ip=''");
+                    .prepareStatement("select * from ec2_queue where "
+                            + "ec2ip is not null and type = 'send'");
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             queuename = rs.getString("queuename");

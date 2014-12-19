@@ -27,22 +27,33 @@ public class ReceivingQueue extends Credentials{
     List<Message> messages;
     String myQueueUrl;
     
+    /**
+     *
+     */
     public void createQueue(){
         for (int i=0;i<RECQUEUENAMES.length;i++){
             CreateQueueRequest createQueueRequest = new CreateQueueRequest().withQueueName(RECQUEUENAMES[i]);
             myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
-            Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-            sqs.setRegion(usWest2);
+            ///Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+            //sqs.setRegion(usWest2);
             DOA doa = new DOA();
             doa.addEc2Queue(myQueueUrl, "");
         }
     }
+
+    /**
+     *
+     * @return
+     */
     public boolean checkIfQueuesExist(){
         int count = 0;
         if (sqs.listQueues().getQueueUrls().size() > 0){
             for (int i=0;i<sqs.listQueues().getQueueUrls().size();i++){
-                if (sqs.listQueues().getQueueUrls().contains(RECQUEUENAMES[count]))
-                    count++;
+                for (int j=0;j<RECQUEUENAMES.length;j++){
+                    if (sqs.listQueues().getQueueUrls().get(i).contains(RECQUEUENAMES[j]))
+                        count++;
+                }
+                
             }
         }
         if (count == (RECQUEUENAMES.length+1))
@@ -50,6 +61,10 @@ public class ReceivingQueue extends Credentials{
         else
             return false;
     }
+
+    /**
+     *
+     */
     public void printMessages(){
         for (int i=0;i<RECQUEUENAMES.length;i++){
             ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(RECQUEUENAMES[i]);
