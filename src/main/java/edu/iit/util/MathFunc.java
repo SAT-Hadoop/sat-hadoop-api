@@ -13,6 +13,12 @@ import java.util.Random;
  */
 public class MathFunc {
     
+    /**
+     *
+     * @param min
+     * @param max
+     * @return
+     */
     public static int randInt(int min, int max) {
 
     // NOTE: Usually this should be a field rather than a method

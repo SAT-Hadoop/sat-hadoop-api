@@ -26,6 +26,10 @@ import java.util.logging.Logger;
  */
 public class EC2 extends Credentials{
     AmazonEC2Client amazonEC2Client = new AmazonEC2Client(Credentials.getCreds());
+
+    /**
+     *
+     */
     public void createInstances(){
         
         for (int i=0;i<NUM_WORKERS;i++){

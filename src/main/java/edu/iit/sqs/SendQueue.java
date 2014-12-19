@@ -29,6 +29,9 @@ public class SendQueue extends Credentials{
     List<Message> messages;
     String myQueueUrl;
     
+    /**
+     *
+     */
     public void createQueue(){
         for (int i=0;i<SENDQUEUENAMES.length;i++){
             CreateQueueRequest createQueueRequest = new CreateQueueRequest().withQueueName(SENDQUEUENAMES[i]);
@@ -41,6 +44,9 @@ public class SendQueue extends Credentials{
         
     }
     
+    /**
+     *
+     */
     public void printAllQueues(){
         for (String queueUrl : sqs.listQueues().getQueueUrls()) {
                 System.out.println("  QueueUrl: " + queueUrl);
@@ -48,6 +54,10 @@ public class SendQueue extends Credentials{
             System.out.println();
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean checkIfQueuesExist(){
         int count = 0;
         if (sqs.listQueues().getQueueUrls().size() > 0){
@@ -62,6 +72,9 @@ public class SendQueue extends Credentials{
             return false;
     }
  
+    /**
+     *
+     */
     public void printMessages(){
         for (int i=0;i<SENDQUEUENAMES.length;i++){
             ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(SENDQUEUENAMES[i]);
@@ -81,13 +94,19 @@ public class SendQueue extends Credentials{
             System.out.println();   
         }
     }
+
+    /**
+     *
+     * @param obj
+     */
     public void sendMessage(Object obj){
         int selection = MathFunc.randInt(0, SENDQUEUENAMES.length);
         sqs.sendMessage(new SendMessageRequest(SQLURL+SENDQUEUENAMES[selection], obj.toString()));
     }
     
-    
-    
+    /**
+     *
+     */
     public void deleteMessage(){
         String messageRecieptHandle = messages.get(0).getReceiptHandle();
         sqs.deleteMessage(new DeleteMessageRequest(myQueueUrl, messageRecieptHandle));

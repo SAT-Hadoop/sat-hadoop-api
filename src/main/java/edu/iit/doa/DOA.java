@@ -22,6 +22,9 @@ public class DOA {
     private Connection connect = null;
     private PreparedStatement preparedStatement = null;
 
+    /**
+     *
+     */
     public void makeConnection() {
         // this will load the MySQL driver, each DB has its own driver
         try {
@@ -37,6 +40,9 @@ public class DOA {
 
     }
 
+    /**
+     *
+     */
     public void createTables() {
         try {
             preparedStatement = connect
@@ -77,6 +83,11 @@ public class DOA {
 
     }
 
+    /**
+     *
+     * @param ec2
+     * @param queue
+     */
     public void addEc2Queue(String ec2, String queue) {
         try {
             preparedStatement = connect
@@ -92,6 +103,11 @@ public class DOA {
         }
     }
 
+    /**
+     *
+     * @param ec2
+     * @param queue
+     */
     public void updateEc2Queue(String ec2, String queue) {
         try {
             preparedStatement = connect
@@ -106,6 +122,10 @@ public class DOA {
         }
     }
 
+    /**
+     *
+     * @param user
+     */
     public void addUser(User user) {
         try {
             preparedStatement = connect
@@ -122,6 +142,10 @@ public class DOA {
         }
     }
 
+    /**
+     *
+     * @param userjob
+     */
     public void addJob(User_Jobs userjob) {
         try {
             preparedStatement = connect
@@ -138,6 +162,10 @@ public class DOA {
         }
     }
 
+    /**
+     *
+     * @param userjob
+     */
     public void updateJob(User_Jobs userjob) {
         try {
             preparedStatement = connect
@@ -155,6 +183,12 @@ public class DOA {
             System.out.println("Could not update the job");
         }
     }
+
+    /**
+     *
+     * @param userid
+     * @return
+     */
     public User getUser(String userid){
         User usr = new User();
         try {
@@ -179,6 +213,11 @@ public class DOA {
         return usr;
     }
     
+    /**
+     *
+     * @param ec2ip
+     * @return
+     */
     public String getEc2Queue(String ec2ip){
         String queuename = "";
         try{
@@ -199,6 +238,10 @@ public class DOA {
         return queuename;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getEc2queue(){
         String queuename = "";
         
