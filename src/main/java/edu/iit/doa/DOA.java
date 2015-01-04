@@ -32,8 +32,14 @@ public class DOA {
             Class.forName("com.mysql.jdbc.Driver");
             // setup the connection with the DB.
             return DriverManager
-                    .getConnection("jdbc:mysql://localhost/itmd544?"
-                            + "user=root&password=root");
+                    .getConnection(""
+                            + "jdbc:mysql://"
+                            + "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
+                            //+"localhost/itmd544?"
+                            + "user=root&password="
+                            + "itmd544master"
+                            //+"root"
+                    );
             
             
         } catch (Exception e) {
@@ -45,6 +51,31 @@ public class DOA {
         return null;
     }
 
+    public User_Jobs getUserJob(String jobid){
+        
+    try {
+            connect = makeConnection();
+            preparedStatement = connect
+                    .prepareStatement("select * from user_jobs where jobid=?");
+            preparedStatement.setString(1, jobid);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            User_Jobs job1 = new User_Jobs();
+            job1.setInputurl(rs.getString(4));
+            job1.setOutputurl(rs.getString(5));
+            job1.setJobid(jobid);
+            rs.close();
+            
+            preparedStatement.close();
+            connect.close();
+            return job1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Addition failed");
+        }
+        return new User_Jobs();
+    }
+    
     /**
      *
      */
@@ -67,6 +98,8 @@ public class DOA {
                             + "jobstatus varchar(100),"
                             + "intputurl varchar(200),"
                             + "outputurl varchar(200),"
+                            + "nodes varchar(10),"
+                            + "jobname varchar(100),"
                             + "CONSTRAINT userid_key FOREIGN KEY (userid) REFERENCES users(userid)"
                             + ")");
 
@@ -151,6 +184,7 @@ public class DOA {
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
             System.out.println("Could not add job to the database");
@@ -163,17 +197,21 @@ public class DOA {
      */
     public void addJob(User_Jobs userjob) {
         try {
+            connect = makeConnection();
             preparedStatement = connect
-                    .prepareStatement("insert into user_jobs values (?,?,?,?,?)");
+                    .prepareStatement("insert into user_jobs values (?,?,?,?,?,?,?);");
             preparedStatement.setString(1, userjob.getUserid());
             preparedStatement.setString(2, userjob.getJobid());
             preparedStatement.setString(3, userjob.getJobstatus());
             preparedStatement.setString(4, userjob.getInputurl());
             preparedStatement.setString(5, userjob.getOutputurl());
+            preparedStatement.setString(6, userjob.getNodes());
+            preparedStatement.setString(7, userjob.getJobname());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             connect.close();
         } catch (Exception e) {
-            System.out.println("Could not add job to the database");
+            e.printStackTrace();
         }
     }
 
@@ -186,12 +224,14 @@ public class DOA {
             connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("update user_jobs set jobstatus=?,inputurl=?,outputurl=? where"
-                            + "userid=? and jobid=?");
+                            + " userid=? and jobid=? and nodes=? and jobname=?" );
             preparedStatement.setString(4, userjob.getUserid());
             preparedStatement.setString(5, userjob.getJobid());
             preparedStatement.setString(1, userjob.getJobstatus());
             preparedStatement.setString(2, userjob.getInputurl());
             preparedStatement.setString(3, userjob.getOutputurl());
+            preparedStatement.setString(6, userjob.getNodes());
+            preparedStatement.setString(7, userjob.getJobname());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connect.close();
@@ -211,7 +251,7 @@ public class DOA {
             connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("select * from user where"
-                            + "userid=?");
+                            + " userid=?");
 
             preparedStatement.setString(1, userid);
             ResultSet rs = preparedStatement.executeQuery();
@@ -241,11 +281,11 @@ public class DOA {
             connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("select * from ec2_queue where"
-                            + "ec2ip=?");
+                            + " ec2ip=?");
             preparedStatement.setString(1,ec2ip);
             ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next())
-                queuename = rs.getString("queuename");
+            rs.next();
+            queuename = rs.getString(2);
             rs.close();
             preparedStatement.close();
             connect.close();

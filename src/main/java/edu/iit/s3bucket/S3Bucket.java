@@ -39,7 +39,7 @@ public class S3Bucket extends Credentials {
      * @return
      */
     public String getBucketName(){
-        return bucketname;
+        return this.bucketname;
     }
 
     /**

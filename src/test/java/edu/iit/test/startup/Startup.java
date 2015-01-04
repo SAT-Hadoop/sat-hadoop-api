@@ -24,7 +24,7 @@ public class Startup {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test 
+    @Test  @Ignore
     public void kickStart() {
     
         DOA doa = new DOA();
@@ -34,8 +34,8 @@ public class Startup {
             System.out.println("Queues dont exist my friend");
             sendqueue.createQueue();
         }
-        EC2 ec2 = new EC2();
-        ec2.createInstances();
+        //EC2 ec2 = new EC2();
+        //ec2.createInstances();
         
     }
     

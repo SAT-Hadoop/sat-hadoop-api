@@ -5,7 +5,6 @@
  */
 package edu.iit.scheduler;
 
-import edu.iit.message.Data;
 import edu.iit.sqs.SendQueue;
 
 /**
@@ -16,14 +15,13 @@ public class Scheduler {
     
     /**
      *
-     * @param data
+     * @param jobid
      * @return
      */
-    public static boolean submitJob(Data data){
+    public static boolean submitJob(String jobid){
         SendQueue sendmessage = new SendQueue();
-        if (!sendmessage.checkIfQueuesExist())
-            sendmessage.createQueue();
-        sendmessage.sendMessage(data);
+        //sendmessage.createQueue();
+        sendmessage.sendMessage(jobid);
         return true;
     }
     

@@ -16,6 +16,26 @@ public class User_Jobs {
     private String outputurl;
     private String jobid;
     private String jobstatus;
+    private String nodes;
+    private String jobname;
+
+    public String getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(String nodes) {
+        this.nodes = nodes;
+    }
+
+    public String getJobname() {
+        return jobname;
+    }
+
+    public void setJobname(String jobname) {
+        this.jobname = jobname;
+    }
+    
+    
 
     /**
      *
@@ -95,6 +115,11 @@ public class User_Jobs {
      */
     public void setJobstatus(String jobstatus) {
         this.jobstatus = jobstatus;
+    }
+
+    @Override
+    public String toString() {
+        return "User_Jobs{" + "userid=" + userid + ", inputurl=" + inputurl + ", outputurl=" + outputurl + ", jobid=" + jobid + ", jobstatus=" + jobstatus + '}';
     }
     
     

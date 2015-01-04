@@ -5,8 +5,6 @@
  */
 package edu.iit.sqs;
 
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
@@ -34,14 +32,16 @@ public class SendQueue extends Credentials{
      */
     public void createQueue(){
         try {
-            for (int i=0;i<SENDQUEUENAMES.length;i++){
+            int queuetocreate = SENDQUEUENAMES.length;// - sqs.listQueues().getQueueUrls().size();
+            
+            for (int i=0;i<queuetocreate;i++){
             System.out.println("creating queue : " + SENDQUEUENAMES[i]);
             CreateQueueRequest createQueueRequest = new CreateQueueRequest().withQueueName(SENDQUEUENAMES[i]);
             myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();    
             //Region usWest2 = Region.getRegion(Regions.US_WEST_2);
             //sqs.setRegion(usWest2);
             DOA doa = new DOA();
-            doa.addEc2Queue("", myQueueUrl);
+            doa.addEc2Queue("", SENDQUEUENAMES[i]);
             }
         }
         catch(Exception e){
@@ -93,6 +93,7 @@ public class SendQueue extends Credentials{
             ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(SENDQUEUENAMES[i]);
             messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
             for (Message message : messages) {
+                
                 System.out.println("  Message");
                 System.out.println("    MessageId:     " + message.getMessageId());
                 System.out.println("    ReceiptHandle: " + message.getReceiptHandle());
@@ -110,19 +111,41 @@ public class SendQueue extends Credentials{
 
     /**
      *
-     * @param obj
+     * @param message
      */
-    public void sendMessage(Object obj){
-        int selection = MathFunc.randInt(0, SENDQUEUENAMES.length);
-        sqs.sendMessage(new SendMessageRequest(SQLURL+SENDQUEUENAMES[selection], obj.toString()));
+    public void sendMessage(String message){
+        int selection = MathFunc.randInt(0, SENDQUEUENAMES.length-1);
+        sqs.sendMessage(new SendMessageRequest(SQLURL+SENDQUEUENAMES[selection], message));
     }
     
     /**
      *
+     * @param message
      */
-    public void deleteMessage(){
-        String messageRecieptHandle = messages.get(0).getReceiptHandle();
-        sqs.deleteMessage(new DeleteMessageRequest(myQueueUrl, messageRecieptHandle));
+    public void deleteMessage(Message message, String queue){
+        String messageRecieptHandle = message.getReceiptHandle();
+        sqs.deleteMessage(new DeleteMessageRequest(queue, messageRecieptHandle));
+    }
+    
+    public Message getMessage(){
+        return messages.get(0);
+    }
+    
+    /**
+     *
+     * @param queuename
+     * @return
+     */
+    public boolean checkForMessages(String queuename){
+        System.out.println("queuename is " + queuename);
+        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queuename);
+        this.messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
+        //System.out.println(messages.get(0).getBody());
+        System.out.println("size is " + messages.size());
+        if (messages.isEmpty())
+            return false;
+        else
+            return true;
     }
     
 }
