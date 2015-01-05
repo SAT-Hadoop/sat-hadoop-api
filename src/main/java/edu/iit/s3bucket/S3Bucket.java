@@ -14,6 +14,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.s3.model.StorageClass;
+import com.amazonaws.services.s3.transfer.MultipleFileUpload;
+import com.amazonaws.services.s3.transfer.TransferManager;
 import edu.iit.credentials.Credentials;
 import java.io.File;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import java.util.UUID;
 public class S3Bucket extends Credentials {
 
     AmazonS3 s3client = new AmazonS3Client(Credentials.getCreds());
+    TransferManager tx = new TransferManager(Credentials.getCreds());
     String bucketname;
 
     /**
@@ -126,6 +129,13 @@ public class S3Bucket extends Credentials {
      */
     public void setBucketname(String bucketname) {
         this.bucketname = bucketname + UUID.randomUUID();
+    }
+    
+    public void uploadDirectory(String directorypath){
+        MultipleFileUpload uploadDirectory = tx.uploadDirectory(this.bucketname, "", new File(directorypath), true);
+        while (uploadDirectory.isDone() == false) {
+            System.out.println(uploadDirectory.getProgress().getPercentTransferred() + "%");
+        }
     }
 
 }
