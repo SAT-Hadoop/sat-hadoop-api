@@ -22,6 +22,7 @@ public class DOAtest {
     }
     @Test @Ignore
     public void testDOA() {
+        
         DOA doa = new DOA();
         User_Jobs userjob = new User_Jobs();
                 userjob.setInputurl("");
