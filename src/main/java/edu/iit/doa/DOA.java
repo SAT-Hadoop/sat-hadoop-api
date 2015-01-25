@@ -34,10 +34,9 @@ public class DOA {
             return DriverManager
                     .getConnection(""
                             + "jdbc:mysql://"
-                            + "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
-                            //+"localhost/itmd544?"
-                            + "user=root&password="
-                            + "itmd544master"
+                            //+ "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
+                            +"localhost/itmd544?"
+                            + "user=root&password=root"
                             //+"root"
                     );
             
@@ -198,6 +197,7 @@ public class DOA {
     public void addJob(User_Jobs userjob) {
         try {
             connect = makeConnection();
+            System.out.println(userjob.toString());
             preparedStatement = connect
                     .prepareStatement("insert into user_jobs values (?,?,?,?,?,?,?);");
             preparedStatement.setString(1, userjob.getUserid());
@@ -211,6 +211,7 @@ public class DOA {
             preparedStatement.close();
             connect.close();
         } catch (Exception e) {
+            System.out.println("There was an error buddy");
             e.printStackTrace();
         }
     }

@@ -24,7 +24,7 @@ public class Startup {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test  @Ignore
+    @Test  
     public void kickStart() {
     
         DOA doa = new DOA();
