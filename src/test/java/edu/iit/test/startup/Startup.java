@@ -34,8 +34,8 @@ public class Startup {
             System.out.println("Queues dont exist my friend");
             sendqueue.createQueue();
         }
-        //EC2 ec2 = new EC2();
-        //ec2.createInstances();
+        EC2 ec2 = new EC2();
+        ec2.createInstances();
         
     }
     
