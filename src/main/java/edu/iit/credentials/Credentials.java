@@ -59,5 +59,6 @@ public abstract class Credentials {
      */
     public final String SQLURL = "https://sqs.us-east-1.amazonaws.com/" + ACCOUNTID + "/";//https://sqs.us-east-1.amazonaws.com/961412573847/
     
-    public final String S3CFG = "/home/supramo/supadyay/eucalyptus/s3cmd/s3cfg";
+    public final String S3CFG = "/home/supramo/supadyay/eucalyptus/s3cfg";
+    
 }

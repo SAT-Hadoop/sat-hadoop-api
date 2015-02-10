@@ -6,7 +6,11 @@
 package edu.iit.walrus;
 
 import edu.iit.credentials.Credentials;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +44,28 @@ public class Walrus extends Credentials{
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public List getObjects(String bucketName){
+        List datasets = new ArrayList();
+        try {
+            Runtime r = Runtime.getRuntime();
+            
+            Process p = r.exec("s3cmd -c "+S3CFG+" ls s3://"+bucketName );//+" | awk -F'/' '{print $4}'");
+            p.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                        String line = "";			
+                        System.out.println("we are printing");
+			while ((line = reader.readLine())!= null) {
+                            String[] words = line.split("/");
+                            
+                            System.out.println("objects are " + words[words.length-1]) ;
+				datasets.add(words[words.length-1]);
+			}
+        } catch (IOException|InterruptedException ex) {
+            Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return datasets;
     }
 
     
