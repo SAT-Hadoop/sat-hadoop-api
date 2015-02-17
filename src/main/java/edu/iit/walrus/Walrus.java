@@ -31,6 +31,7 @@ public class Walrus extends Credentials{
     public void putObject(String bucketName,String filePath){
         try {
             Runtime r = Runtime.getRuntime();
+            System.out.println("file path is " + filePath + "  bucketname is "+ bucketName);
             r.exec("s3cmd -c "+S3CFG+" put "+filePath+" s3://"+bucketName).waitFor();
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
