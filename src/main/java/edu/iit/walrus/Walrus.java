@@ -22,7 +22,7 @@ public class Walrus extends Credentials{
     public void createBucket(String bucketName){
         try {
             Runtime r = Runtime.getRuntime();
-            r.exec("s3cfg -c "+S3CFG+" mb "+bucketName).waitFor();
+            r.exec("s3cmd -c "+S3CFG+" mb s3://"+bucketName).waitFor();
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -31,7 +31,7 @@ public class Walrus extends Credentials{
     public void putObject(String bucketName,String filePath){
         try {
             Runtime r = Runtime.getRuntime();
-            r.exec("s3cfg -c "+S3CFG+" put "+filePath+" s3://"+bucketName).waitFor();
+            r.exec("s3cmd -c "+S3CFG+" put "+filePath+" s3://"+bucketName).waitFor();
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -40,7 +40,7 @@ public class Walrus extends Credentials{
     public void delObject(String bucketName,String fileName){
         try {
             Runtime r = Runtime.getRuntime();
-            r.exec("s3cfg -c "+S3CFG+" del s3://"+bucketName+"/"+fileName).waitFor();
+            r.exec("s3cmd -c "+S3CFG+" del s3://"+bucketName+"/"+fileName).waitFor();
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
