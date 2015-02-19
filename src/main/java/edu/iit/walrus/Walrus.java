@@ -31,7 +31,7 @@ public class Walrus extends Credentials{
     public void putObject(String bucketName,String filePath){
         try {
             Runtime r = Runtime.getRuntime();
-            System.out.println("file path is " + filePath + "  bucketname is "+ bucketName);
+            Logger.getLogger(Walrus.class.getName()).log(Level.INFO, "file path is " + filePath + "  bucketname is "+ bucketName);
             r.exec("s3cmd -c "+S3CFG+" put "+filePath+" s3://"+bucketName).waitFor();
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,6 +45,19 @@ public class Walrus extends Credentials{
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void downloadObject(String bucketName,String filename){
+        try {
+            Runtime r = Runtime.getRuntime();
+            
+            r.exec("s3cmd -c "+S3CFG+" get s3://"+bucketName+"/"+filename ).waitFor();//+" | awk -F'/' '{print $4}'");
+            r.exec("s3cmd -c "+S3CFG+ "cp filename "+"/tmp/inputfile").waitFor();           
+            
+        } catch (IOException|InterruptedException ex) {
+            Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
     }
     
     public List getObjects(String bucketName){
@@ -68,6 +81,7 @@ public class Walrus extends Credentials{
         }
         return datasets;
     }
+    
 
     
 }
