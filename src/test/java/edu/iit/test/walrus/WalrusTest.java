@@ -17,14 +17,12 @@ public class WalrusTest {
     
     public WalrusTest() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
     @Test
     public void hello() {
         Walrus walrus = new Walrus();
-        walrus.createBucket("sat-hadoop");
+        //walrus.createBucket("sat-hadoop
+        walrus.getObjects("sat-hadoop");
+        walrus.downloadObject("sat-hadoop", "IssueBoardingPass-2.pdf");
     
     }
 }

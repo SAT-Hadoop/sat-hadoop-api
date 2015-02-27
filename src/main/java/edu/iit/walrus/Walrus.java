@@ -51,10 +51,19 @@ public class Walrus extends Credentials{
         try {
             Runtime r = Runtime.getRuntime();
             
-            r.exec("s3cmd -c "+S3CFG+" get s3://"+bucketName+"/"+filename ).waitFor();//+" | awk -F'/' '{print $4}'");
-            r.exec("s3cmd -c "+S3CFG+ "cp filename "+"/tmp/inputfile").waitFor();           
+            Process p =r.exec("s3cmd -c "+S3CFG+" get s3://"+bucketName+"/"+filename + " /tmp/"+filename );
+            p.waitFor();
             
+            BufferedReader reader = 
+         new BufferedReader(new InputStreamReader(p.getInputStream()));
+ 
+            StringBuffer sb = new StringBuffer();
+    String line = "";			
+    while ((line = reader.readLine())!= null) {
+	sb.append(line + "\n");
+    }
         } catch (IOException|InterruptedException ex) {
+            System.out.println("There was a problem with download");
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }        
         

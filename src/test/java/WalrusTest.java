@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import edu.iit.doa.DOA;
 import edu.iit.walrus.Walrus;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ public class WalrusTest {
     //
     @Test
     public void displayObjects() {
+        DOA doa = new DOA();
+        doa.createTables();
         Walrus walrus = new Walrus();
         List objects = new ArrayList();
         objects.addAll(walrus.getObjects("hadoopimage"));

@@ -35,7 +35,7 @@ public class DOA {
                     .getConnection(""
                             + "jdbc:mysql://"
                             //+ "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
-                            +"localhost/itmd544?"
+                            +"64.131.111.18/itmd544?"
                             + "user=root&password=root"
                             //+"root"
                     );
@@ -95,7 +95,7 @@ public class DOA {
                             + "userid varchar(30),"
                             + "jobid varchar(255) PRIMARY KEY,"
                             + "jobstatus varchar(100),"
-                            + "intputurl varchar(200),"
+                            + "inputurl varchar(200),"
                             + "outputurl varchar(200),"
                             + "nodes varchar(10),"
                             + "jobname varchar(100),"
@@ -237,7 +237,7 @@ public class DOA {
             preparedStatement.close();
             connect.close();
         } catch (Exception e) {
-            System.out.println("Could not update the job");
+            e.printStackTrace();
         }
     }
 
