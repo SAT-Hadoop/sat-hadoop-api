@@ -35,7 +35,7 @@ public class DOA {
                     .getConnection(""
                             + "jdbc:mysql://"
                             //+ "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
-                            +"192.168.182.121/itmd544?"
+                            +"64.131.111.18/itmd544?"
                             + "user=root&password=root"
                             //+"root"
                     );
@@ -51,7 +51,6 @@ public class DOA {
     }
 
     public User_Jobs getUserJob(String jobid){
-        
     try {
             connect = makeConnection();
             preparedStatement = connect
