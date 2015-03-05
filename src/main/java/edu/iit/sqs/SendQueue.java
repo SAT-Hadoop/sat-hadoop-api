@@ -115,7 +115,13 @@ public class SendQueue extends Credentials{
      */
     public void sendMessage(String message){
         int selection = MathFunc.randInt(0, SENDQUEUENAMES.length-1);
-        sqs.sendMessage(new SendMessageRequest(SQLURL+SENDQUEUENAMES[selection], message));
+        try{
+            sqs.sendMessage(new SendMessageRequest(SQLURL+SENDQUEUENAMES[selection], message));
+        }
+        catch(Exception e){
+            System.out.println("could not send message");
+        }
+        
     }
     
     /**

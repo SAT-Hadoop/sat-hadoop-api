@@ -35,6 +35,7 @@ public class DOA {
                     .getConnection(""
                             + "jdbc:mysql://"
                             //+ "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
+                            //+"localhost/itmd544"
                             +"64.131.111.18/itmd544?"
                             + "user=root&password=root"
                             //+"root"
@@ -59,17 +60,17 @@ public class DOA {
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             User_Jobs job1 = new User_Jobs();
+            job1.setUserid(rs.getString(1));
             job1.setInputurl(rs.getString(4));
             job1.setOutputurl(rs.getString(5));
             job1.setJobid(jobid);
             rs.close();
-            
             preparedStatement.close();
             connect.close();
             return job1;
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Addition failed");
+            System.out.println("Fetch failed");
         }
         return new User_Jobs();
     }

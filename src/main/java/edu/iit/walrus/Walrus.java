@@ -32,7 +32,7 @@ public class Walrus extends Credentials{
         try {
             Runtime r = Runtime.getRuntime();
             Logger.getLogger(Walrus.class.getName()).log(Level.INFO, "file path is " + filePath + "  bucketname is "+ bucketName);
-            r.exec("s3cmd -c "+S3CFG+" put "+filePath+" s3://"+bucketName).waitFor();
+            r.exec("s3cmd -c "+S3CFG+" put "+filePath+" s3://"+bucketName + " --recursive").waitFor();
         } catch (IOException|InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
