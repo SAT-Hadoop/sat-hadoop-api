@@ -7,9 +7,9 @@ package edu.iit.test.doa;
 
 import edu.iit.doa.DOA;
 import edu.iit.model.User_Jobs;
+import java.util.List;
 import java.util.UUID;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
 
 /**
@@ -24,15 +24,9 @@ public class DOAtest {
     public void testDOA() {
         
         DOA doa = new DOA();
-        User_Jobs userjob = new User_Jobs();
-                userjob.setInputurl("");
-                userjob.setOutputurl("");
-                userjob.setUserid("sai");
-                userjob.setJobstatus("INITIAL");
-                String randomId = UUID.randomUUID().toString();
-                userjob.setJobid(randomId);
-                System.out.println(userjob.toString());
-                doa.addJob(userjob);
+        List slaves = doa.getSlaves(1);
+        System.out.println(slaves.get(0));
+        
         
     }
 }

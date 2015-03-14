@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -109,6 +111,14 @@ public class DOA {
                             + "ec2ip varchar(255),"
                             + "queuename varchar(255),"
                             + "type varchar(255)"
+                            + ")");
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connect
+                    .prepareStatement("CREATE TABLE IF NOT EXISTS hadoop_slaves ("
+                            + "ec2ip varchar(255),"
+                            + "status varchar(255)"
                             + ")");
 
             preparedStatement.executeUpdate();
@@ -320,5 +330,51 @@ public class DOA {
             System.out.println("sai is aesome");
         }
         return queuename;
+    }
+    
+    public List getSlaves(int n){
+        List listOfSlaves = new ArrayList();
+        try{
+            connect = makeConnection();
+            preparedStatement = connect
+                    .prepareStatement("select * from hadoop_slaves where "
+                            + "status= 'a' limit ?");
+            preparedStatement.setString(1, Integer.toString(n));
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+                listOfSlaves.add(rs.getString("ec2ip"));
+            }
+            if (listOfSlaves.size() == n){
+                for (int i=0;i<listOfSlaves.size();i++){
+                    updateSlave((String)listOfSlaves.get(i),"n");
+                }
+            }
+                
+            rs.close();
+            preparedStatement.close();
+            connect.close();
+        }
+        catch(Exception e){
+            System.out.println("sai is aesome");
+        }
+        
+        return listOfSlaves;
+    }
+    
+    public void updateSlave(String ec2ip,String status){
+        try {
+            connect = makeConnection();
+            preparedStatement = connect
+                    .prepareStatement("update hadoop_slaves set status=?"
+                            + " ec2ip=?");
+            preparedStatement.setString(1,ec2ip);
+            preparedStatement.setString(2,status);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connect.close();
+        }
+        catch(Exception e){
+            System.out.println("There was a problem with updating the instance status");
+        }
     }
 }
