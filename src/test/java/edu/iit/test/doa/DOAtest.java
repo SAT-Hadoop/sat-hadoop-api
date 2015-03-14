@@ -20,7 +20,7 @@ public class DOAtest {
     
     public DOAtest() {
     }
-    @Test @Ignore
+    @Test
     public void testDOA() {
         
         DOA doa = new DOA();

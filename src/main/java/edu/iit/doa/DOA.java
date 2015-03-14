@@ -338,10 +338,11 @@ public class DOA {
             connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("select * from hadoop_slaves where "
-                            + "status= 'a' limit ?");
+                            + "status= 'a'");
             preparedStatement.setString(1, Integer.toString(n));
             ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()){
+            int count = 1;
+            while (rs.next() && count < n){
                 listOfSlaves.add(rs.getString("ec2ip"));
             }
             if (listOfSlaves.size() == n){
@@ -349,7 +350,6 @@ public class DOA {
                     updateSlave((String)listOfSlaves.get(i),"n");
                 }
             }
-                
             rs.close();
             preparedStatement.close();
             connect.close();
