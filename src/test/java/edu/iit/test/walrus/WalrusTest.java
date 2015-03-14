@@ -8,6 +8,7 @@ package edu.iit.test.walrus;
 import edu.iit.walrus.Walrus;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -17,7 +18,7 @@ public class WalrusTest {
     
     public WalrusTest() {
     }
-    @Test
+    @Test @Ignore
     public void hello() {
         Walrus walrus = new Walrus();
         //walrus.createBucket("sat-hadoop
