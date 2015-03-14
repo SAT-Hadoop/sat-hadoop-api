@@ -339,12 +339,15 @@ public class DOA {
             preparedStatement = connect
                     .prepareStatement("select * from hadoop_slaves where "
                             + "status= 'a'");
-            preparedStatement.setString(1, Integer.toString(n));
             ResultSet rs = preparedStatement.executeQuery();
+            System.out.println("Query is here at 1");
             int count = 1;
-            while (rs.next() && count < n){
+            while (rs.next() && count <= n){
+                System.out.println("The ip is "+rs.getString("ec2ip"));
                 listOfSlaves.add(rs.getString("ec2ip"));
+                count++;
             }
+            System.out.println("Query is here at 2");
             if (listOfSlaves.size() == n){
                 for (int i=0;i<listOfSlaves.size();i++){
                     updateSlave((String)listOfSlaves.get(i),"n");
@@ -355,7 +358,8 @@ public class DOA {
             connect.close();
         }
         catch(Exception e){
-            System.out.println("sai is aesome");
+            e.printStackTrace();
+            System.out.println("Issue executing the query sai");
         }
         
         return listOfSlaves;
@@ -366,9 +370,9 @@ public class DOA {
             connect = makeConnection();
             preparedStatement = connect
                     .prepareStatement("update hadoop_slaves set status=?"
-                            + " ec2ip=?");
-            preparedStatement.setString(1,ec2ip);
-            preparedStatement.setString(2,status);
+                            + " where ec2ip=?");
+            preparedStatement.setString(2,ec2ip);
+            preparedStatement.setString(1,status);
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connect.close();
