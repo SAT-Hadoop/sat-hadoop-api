@@ -18,79 +18,78 @@ import java.util.logging.Logger;
  *
  * @author supramo
  */
-public class Walrus extends Credentials{
-    public void createBucket(String bucketName){
+public class Walrus extends Credentials {
+
+    public void createBucket(String bucketName) {
         try {
             Runtime r = Runtime.getRuntime();
-            r.exec("s3cmd -c "+S3CFG+" mb s3://"+bucketName).waitFor();
-        } catch (IOException|InterruptedException ex) {
+            r.exec("s3cmd -c " + S3CFG + " mb s3://" + bucketName).waitFor();
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void putObject(String bucketName,String filePath){
+
+    public void putObject(String bucketName, String filePath) {
         try {
             Runtime r = Runtime.getRuntime();
-            Logger.getLogger(Walrus.class.getName()).log(Level.INFO, "file path is " + filePath + "  bucketname is "+ bucketName);
-            r.exec("s3cmd -c "+S3CFG+" put "+filePath+" s3://"+bucketName + " --recursive").waitFor();
-        } catch (IOException|InterruptedException ex) {
+            Logger.getLogger(Walrus.class.getName()).log(Level.INFO, "file path is " + filePath + "  bucketname is " + bucketName);
+            r.exec("s3cmd -c " + S3CFG + " put " + filePath + " s3://" + bucketName + " --recursive").waitFor();
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void delObject(String bucketName,String fileName){
+
+    public void delObject(String bucketName, String fileName) {
         try {
             Runtime r = Runtime.getRuntime();
-            r.exec("s3cmd -c "+S3CFG+" del s3://"+bucketName+"/"+fileName).waitFor();
-        } catch (IOException|InterruptedException ex) {
+            r.exec("s3cmd -c " + S3CFG + " del s3://" + bucketName + "/" + fileName).waitFor();
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void downloadObject(String bucketName,String filename){
+
+    public void downloadObject(String bucketName, String filename) {
         try {
             Runtime r = Runtime.getRuntime();
-            
-            Process p =r.exec("s3cmd -c "+S3CFG+" get s3://"+bucketName+"/"+filename + " /tmp/"+filename );
+
+            Process p = r.exec("s3cmd -c " + S3CFG + " get s3://" + bucketName + "/" + filename + " /tmp/" + filename);
             p.waitFor();
-            
-            BufferedReader reader = 
-         new BufferedReader(new InputStreamReader(p.getInputStream()));
- 
+
+            BufferedReader reader
+                    = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
             StringBuffer sb = new StringBuffer();
-    String line = "";			
-    while ((line = reader.readLine())!= null) {
-	sb.append(line + "\n");
-    }
-        } catch (IOException|InterruptedException ex) {
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException | InterruptedException ex) {
             System.out.println("There was a problem with download");
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        
+        }
+
     }
-    
-    public List getObjects(String bucketName){
+
+    public List getObjects(String bucketName) {
         List datasets = new ArrayList();
         try {
             Runtime r = Runtime.getRuntime();
-            
-            Process p = r.exec("s3cmd -c "+S3CFG+" ls s3://"+bucketName );//+" | awk -F'/' '{print $4}'");
+
+            Process p = r.exec("s3cmd -c " + S3CFG + " ls s3://" + bucketName);//+" | awk -F'/' '{print $4}'");
             p.waitFor();
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                        String line = "";			
-                        System.out.println("we are printing");
-			while ((line = reader.readLine())!= null) {
-                            String[] words = line.split("/");
-                            
-                            System.out.println("objects are " + words[words.length-1]) ;
-				datasets.add(words[words.length-1]);
-			}
-        } catch (IOException|InterruptedException ex) {
+            String line = "";
+            System.out.println("we are printing");
+            while ((line = reader.readLine()) != null) {
+                String[] words = line.split("/");
+
+                System.out.println("objects are " + words[words.length - 1]);
+                datasets.add(words[words.length - 1]);
+            }
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(Walrus.class.getName()).log(Level.SEVERE, null, ex);
         }
         return datasets;
     }
-    
 
-    
 }

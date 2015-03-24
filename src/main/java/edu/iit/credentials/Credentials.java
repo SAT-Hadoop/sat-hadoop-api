@@ -31,35 +31,35 @@ public abstract class Credentials {
     }
 
     
-    public final String KEY_NAME = "itmo562";
+    public static final String KEY_NAME = "itmo562";
     
-    public final String IAM_PROFILE_NAME = "developer";
+    public static final String IAM_PROFILE_NAME = "developer";
     /**
      *
      */
-    public final int NUM_WORKERS = 3;
+    public static final int NUM_WORKERS = 3;
 
     /**
      *
      */
-    public final String[] SENDQUEUENAMES = {"sai4", "sai2", "sai3"};
+    public static final String[] SENDQUEUENAMES = {"sai4", "sai2", "sai3"};
 
     /**
      *
      */
-    public final String[] RECQUEUENAMES = {"pramod1"};
+    public static final String[] RECQUEUENAMES = {"pramod1"};
 
     /**
      *
      */
-    public final String ACCOUNTID = "961412573847";
+    public static final String ACCOUNTID = "961412573847";
 
     /**
      *
      */
-    public final String SQLURL = "https://sqs.us-east-1.amazonaws.com/" + ACCOUNTID + "/";//https://sqs.us-east-1.amazonaws.com/961412573847/
+    public static final String SQLURL = "https://sqs.us-east-1.amazonaws.com/" + ACCOUNTID + "/";
     
     //public final String S3CFG = "/root/s3cfg";\
-    public final String S3CFG = "/root/s3cfg";
+    public static final String S3CFG = "/root/s3cfg";
     
 }

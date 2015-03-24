@@ -36,11 +36,8 @@ public class DOA {
             return DriverManager
                     .getConnection(""
                             + "jdbc:mysql://"
-                            //+ "itmd544.cbpipzbeulcc.us-west-2.rds.amazonaws.com/itmd544?"
-                            //+"localhost/itmd544"
                             +"64.131.111.18/itmd544?"
                             + "user=root&password=root"
-                            //+"root"
                     );
             
             
