@@ -81,15 +81,6 @@ public class DOA {
         try {
             connect = makeConnection();
             preparedStatement = connect
-                    .prepareStatement("CREATE TABLE IF NOT EXISTS users ("
-                            + "userid varchar(30) PRIMARY KEY,"
-                            + "emailid varchar(50),"
-                            + "phonenumber int,"
-                            + "password varchar(30)"
-                            + ")");
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            preparedStatement = connect
                     .prepareStatement("CREATE TABLE IF NOT EXISTS user_jobs ("
                             + "userid varchar(30),"
                             + "jobid varchar(255) PRIMARY KEY,"
@@ -97,8 +88,7 @@ public class DOA {
                             + "inputurl varchar(200),"
                             + "outputurl varchar(200),"
                             + "nodes varchar(10),"
-                            + "jobname varchar(100),"
-                            + "CONSTRAINT userid_key FOREIGN KEY (userid) REFERENCES users(userid)"
+                            + "jobname varchar(100)"
                             + ")");
 
             preparedStatement.executeUpdate();
@@ -221,6 +211,28 @@ public class DOA {
             System.out.println("There was an error buddy");
             e.printStackTrace();
         }
+    }
+    public int getJobs(String userid){
+        int result = 0;
+        try {
+            connect = makeConnection();
+            preparedStatement = connect
+                    .prepareStatement("select * from user_jobs "
+                            + " where userid=?");
+            preparedStatement.setString(1,userid);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                result++;
+            }
+            rs.close();
+            preparedStatement.close();
+            connect.close();
+        }
+        catch(Exception e){
+            System.out.println("There was a problem with updating the instance status");
+        }
+        
+        return 0;
     }
 
     /**
@@ -378,4 +390,6 @@ public class DOA {
             System.out.println("There was a problem with updating the instance status");
         }
     }
+    
+    
 }
