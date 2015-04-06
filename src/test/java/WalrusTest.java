@@ -26,10 +26,5 @@ public class WalrusTest {
     public void displayObjects() {
         DOA doa = new DOA();
         doa.createTables();
-        Walrus walrus = new Walrus();
-        List objects = new ArrayList();
-        objects.addAll(walrus.getObjects("hadoopimage"));
-        System.out.println(objects.toString());
-        
     }
 }
