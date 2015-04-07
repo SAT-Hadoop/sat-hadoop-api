@@ -59,10 +59,12 @@ public class DOA {
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             User_Jobs job1 = new User_Jobs();
-            job1.setUserid(rs.getString(1));
-            job1.setInputurl(rs.getString(4));
-            job1.setOutputurl(rs.getString(5));
-            job1.setJobid(jobid);
+            job1.setUserid(rs.getString("userid"));
+            job1.setInputurl(rs.getString("inputurl"));
+            job1.setOutputurl(rs.getString("outputurl"));
+            job1.setNodes(rs.getString("nodes"));
+            job1.setJobid(rs.getString("jobid"));
+            job1.setJobname(rs.getString("jobname"));
             rs.close();
             preparedStatement.close();
             connect.close();
