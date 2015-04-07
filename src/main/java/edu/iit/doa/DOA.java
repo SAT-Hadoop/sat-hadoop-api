@@ -353,7 +353,7 @@ public class DOA {
             ResultSet rs = preparedStatement.executeQuery();
             System.out.println("Query is here at 1");
             int count = 1;
-            while (rs.next() && count < n){
+            while (rs.next() && count <= n){
                 System.out.println("The ip is "+rs.getString("ec2ip"));
                 listOfSlaves.add(rs.getString("ec2ip"));
                 count++;
