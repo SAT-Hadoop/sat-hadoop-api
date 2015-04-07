@@ -119,9 +119,8 @@ public class User_Jobs {
 
     @Override
     public String toString() {
-        return "User_Jobs{" + "userid=" + userid + ", inputurl=" + inputurl + ", outputurl=" + outputurl + ", jobid=" + jobid + ", jobstatus=" + jobstatus + '}';
+        return "User_Jobs{" + "userid=" + userid + ", inputurl=" + inputurl + ", outputurl=" + outputurl + ", jobid=" + jobid + ", jobstatus=" + jobstatus + ", nodes=" + nodes + ", jobname=" + jobname + '}';
     }
-    
     
     
 }
