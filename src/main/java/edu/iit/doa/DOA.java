@@ -36,7 +36,7 @@ public class DOA {
             return DriverManager
                     .getConnection(""
                             + "jdbc:mysql://"
-                            +"64.131.111.18/itmd544?"
+                            +"64.131.111.24/itmd544?"
                             + "user=root&password=root"
                     );
             
