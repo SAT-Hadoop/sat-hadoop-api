@@ -5,6 +5,7 @@
  */
 package edu.iit.doa;
 
+import edu.iit.credentials.Credentials;
 import edu.iit.model.User;
 import edu.iit.model.User_Jobs;
 import java.sql.Connection;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  * @author supramo
  */
-public class DOA {
+public class DOA extends Credentials{
 
     private Connection connect = null;
     private PreparedStatement preparedStatement = null;
@@ -112,6 +113,21 @@ public class DOA {
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            
+            preparedStatement = connect
+                    .prepareStatement("CREATE TABLE IF NOT EXISTS queues ("
+                            + "queuename varchar(255)"
+                            + ")");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            for (int i=0;i< SENDQUEUENAMES.length;i++){
+                preparedStatement = connect
+                    .prepareStatement("insert into queues values (?)");
+            preparedStatement.setString(1, SENDQUEUENAMES[i]);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            }
+            
             connect.close();
         } catch (Exception e) {
             

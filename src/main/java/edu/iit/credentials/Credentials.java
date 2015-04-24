@@ -62,4 +62,6 @@ public abstract class Credentials {
     //public final String S3CFG = "/root/s3cfg";\
     public static final String S3CFG = "/root/s3cfg";
     
+    public static final String THEPATH = "/vol-01/";
+    
 }

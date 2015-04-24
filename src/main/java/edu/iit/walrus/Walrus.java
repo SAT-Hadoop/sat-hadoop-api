@@ -52,7 +52,7 @@ public class Walrus extends Credentials {
         try {
             Runtime r = Runtime.getRuntime();
 
-            Process p = r.exec("s3cmd -c " + S3CFG + " get s3://" + bucketName + "/" + filename + " /tmp/" + filename);
+            Process p = r.exec("s3cmd -c " + S3CFG + " get s3://" + bucketName + "/" + filename + THEPATH + filename);
             p.waitFor();
 
             BufferedReader reader
@@ -71,6 +71,7 @@ public class Walrus extends Credentials {
     }
 
     public List getObjects(String bucketName) {
+        createBucket(bucketName);
         List datasets = new ArrayList();
         try {
             Runtime r = Runtime.getRuntime();
