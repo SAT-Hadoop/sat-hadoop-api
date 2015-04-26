@@ -52,7 +52,7 @@ public class Walrus extends Credentials {
         try {
             Runtime r = Runtime.getRuntime();
 
-            Process p = r.exec("s3cmd -c " + S3CFG + " get s3://" + bucketName + "/" + filename + THEPATH + filename);
+            Process p = r.exec("s3cmd -c " + S3CFG + " get s3://" + bucketName + "/" + filename +" "+ THEPATH + filename);
             p.waitFor();
 
             BufferedReader reader
