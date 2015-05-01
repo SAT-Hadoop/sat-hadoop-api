@@ -144,7 +144,8 @@ public class SendQueue extends Credentials{
      */
     public boolean checkForMessages(String queuename){
         System.out.println("queuename is " + queuename);
-        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queuename);
+        try {
+            ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queuename);
         this.messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
         //System.out.println(messages.get(0).getBody());
         System.out.println("size is " + messages.size());
@@ -152,6 +153,11 @@ public class SendQueue extends Credentials{
             return false;
         else
             return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+        
     }
     
 }
