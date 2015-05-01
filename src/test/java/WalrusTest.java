@@ -25,6 +25,6 @@ public class WalrusTest {
     @Test
     public void displayObjects() {
         DOA doa = new DOA();
-        doa.createTables();
+        //doa.createTables();
     }
 }
