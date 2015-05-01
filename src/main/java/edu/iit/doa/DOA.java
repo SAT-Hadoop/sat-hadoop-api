@@ -45,7 +45,7 @@ public class DOA extends Credentials{
         } catch (Exception e) {
             //e.printStackTrace();
             System.out.println("Could not make connection");
-            System.exit(1);
+            //System.exit(1);
         }
         
         return null;
