@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 import edu.iit.doa.DOA;
-import edu.iit.elasticmq.Queue;
+import edu.iit.rabbitmq.Send;
 import edu.iit.walrus.Walrus;
 import java.net.Inet4Address;
 import java.util.ArrayList;
@@ -28,10 +28,10 @@ public class WalrusTest {
     public void displayObjects() {
         DOA doa = new DOA();
         String ipaddress,queuename;
-        try {
+  /*      try {
             ipaddress = Inet4Address.getLocalHost().getHostAddress();
             queuename = doa.getEc2Queue(ipaddress);
-            Queue queue = new Queue();
+            Send queue = new Send();
             queue.sendMessage("sai is awesome");
             if (queue.checkForMessages(queuename)){
                 System.out.println(queue.getMessage().getBody());
@@ -41,7 +41,7 @@ public class WalrusTest {
         }
         catch(Exception e){
             System.out.println("Somethig is wrong");
-        }
+        }*/
         //doa.createTables();
     }
 }
