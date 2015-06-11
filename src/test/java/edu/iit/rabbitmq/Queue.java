@@ -14,7 +14,7 @@ import org.junit.Test;
  */
 public class Queue {
     
-    @Test @Ignore
+    @Test 
     public void sendMessage(){
         Send sendmessage = new Send();
         try {
@@ -24,7 +24,7 @@ public class Queue {
         }
     }
     
-    @Test @Ignore
+    @Test 
     public void getMessage(){
         Receive receivemessage = new Receive();
         try {
