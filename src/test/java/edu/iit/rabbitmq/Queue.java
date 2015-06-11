@@ -18,20 +18,25 @@ public class Queue {
     public void sendMessage(){
         Send sendmessage = new Send();
         try {
-            sendmessage.sendMessage("sai is awesome", "sai1");
+            sendmessage.sendMessage("jeremy is awesome");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
     
-    @Test
+    @Test @Ignore
     public void getMessage(){
         Receive receivemessage = new Receive();
         try {
-            System.out.println(receivemessage.getMessage("sai1"));
+            System.out.println();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    
+    @Test @Ignore
+    public void deleteMessage(){
+        
     }
     
 }

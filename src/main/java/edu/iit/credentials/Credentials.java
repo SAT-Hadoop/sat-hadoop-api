@@ -64,6 +64,7 @@ public abstract class Credentials {
     
     public static final String THEPATH = "/vol-01/";
     
-    public static final String[] ELASTICMQ = {"http://64.131.111.91:9324", "http://64.131.111.91:9324","http://64.131.111.91:9324"};
+    public static final String RABBITMQ = "64.131.111.91";
+    public static final String QUEUENAME = "sai";
     
 }
