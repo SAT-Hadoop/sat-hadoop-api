@@ -23,7 +23,8 @@ import java.util.Map;
  */
 public class ReceivingQueue extends Credentials{
     
-    private final AmazonSQS sqs = new AmazonSQSClient(Credentials.getCreds());
+    //private final AmazonSQS sqs = new AmazonSQSClient(Credentials.getCreds());
+    private final AmazonSQS sqs = null;
     List<Message> messages;
     String myQueueUrl;
     

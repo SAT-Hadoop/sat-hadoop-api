@@ -15,12 +15,9 @@ import static edu.iit.credentials.Credentials.RABBITMQ;
  *
  * @author supramo
  */
-public class Receive{
+public class Receive extends Queue{
     public String getMessage() throws Exception{
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(RABBITMQ);
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+        Channel channel = getChannel();
         QueueingConsumer consumer = new QueueingConsumer(channel);
         channel.basicConsume(QUEUENAME, true, consumer);
         QueueingConsumer.Delivery delivery = consumer.nextDelivery();

@@ -5,42 +5,36 @@
  */
 package edu.iit.rabbitmq;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
+import static edu.iit.credentials.Credentials.QUEUENAME;
+import static edu.iit.credentials.Credentials.RABBITMQ;
+
 /**
  *
  * @author supramo
  */
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import static edu.iit.credentials.Credentials.QUEUENAME;
-import static edu.iit.credentials.Credentials.RABBITMQ;
-
-public class Send extends Queue{
-
-
+public abstract class Queue{
+    
     /**
      *
-     * @param message
-     * @throws Exception
+     * @return
      */
-    public void sendMessage(String message) throws Exception {
-        
+    protected Channel getChannel(){
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(RABBITMQ);
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+        Channel channel = null;
         try {
+            Connection connection = factory.newConnection();
+            channel = connection.createChannel();
             channel.queueDeclare(QUEUENAME, false, false, false, null);
         }
         catch(Exception e){
             System.out.println("Queue already exists, moving on");
         }
-        
-        channel.basicPublish("", QUEUENAME, null, message.getBytes("UTF-8"));
-        System.out.println(" [x] Sent '" + message + "'");
-
-        channel.close();
-        connection.close();
+        return channel;
     }
     
 }
